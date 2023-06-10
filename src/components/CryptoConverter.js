@@ -8,7 +8,9 @@ import axios from "axios";
 const CryptoConverter = () => {
   
   const [data, setData] = useState(null);
+
   const [convertValue, setConvertValue] = useState(null);
+  const [isConverting, setIsConverting] = useState(false);
 
   const [amount, setAmount] = useState(1);
   const [selectedValueFrom, setSelectedValueFrom] = useState('BTC');
@@ -59,6 +61,7 @@ const CryptoConverter = () => {
   const convertCoin = (e) => {
     e.preventDefault();
     // console.log(selectedValueFrom, selectedValueTo, amount)
+    setIsConverting(true)
 
     axios
       .get(`http://localhost:8080/${convertUrl}`, {
@@ -73,6 +76,7 @@ const CryptoConverter = () => {
       })
       .then((res) => {
         console.log(res.data);
+        setIsConverting(false)
         const convertedPrice = res.data.data[0].quote[selectedValueTo].price.toFixed(3);
         console.log(convertedPrice)
         setConvertValue(convertedPrice);
@@ -119,9 +123,19 @@ const CryptoConverter = () => {
         </div>
 
         <div className="exchange-rate">
-          <p>{amount} {selectedValueFrom}</p> <span className="equal-sign">=</span> <strong>{convertValue} {selectedValueTo}</strong>
+          <p>
+            {amount} {selectedValueFrom}
+          </p>{" "}
+          <span className="equal-sign">=</span>{" "}
+          {isConverting ? (
+            <ImSpinner9 className="rotation-icon" />
+          ) : (
+            <strong>
+              {convertValue} {selectedValueTo}
+            </strong>
+          )}
         </div>
-        <button>Convert</button>
+        <button disabled={isConverting}>Convert</button>
       </form>
       <Link className="go-home" to="/">
         <GrLinkPrevious />
