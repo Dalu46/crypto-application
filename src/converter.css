@@ -1,0 +1,61 @@
+.converter {
+    background: rgb(248, 248, 248);
+    padding: 24px;
+    border-radius: 6px;
+    min-height: 20px;
+    margin: 20px auto;
+    border: 0px;
+  }
+  
+  form {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  form :where(input, select, button) {
+      width: 100%;
+      border: 1px solid #999;
+      outline: none;
+      border-radius: 6px;
+      height: 50px;
+  }
+  
+  form :where(input) {
+      padding: 0 15px;
+      font-size: large;
+  }
+  
+  .exchange-rate {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: large;
+    align-items: center;
+  }
+  
+  .converter-wrapper {
+    margin: 70px auto;
+    padding: 25px;
+    max-width: 600px;
+  }
+  
+  .equal-sign {
+    margin: 0 6px;
+  }
+  
+  .convert-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .go-home {
+    gap: 10px;
+    display: flex;
+    margin-left: 15px;
+    align-items: center;
+  }
+  
