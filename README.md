@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Architecture Choice
+This application follows the Component-Based Architecture pattern, which is commonly used in React applications. In this architecture, the application is broken into reusable and self-contained components that contians their individual logic and user interface.
+
+The reason for using this architecture is that it promotes a clear separation of concerns by breaking the application into smaller, focused components. Each component is responsible for a specific functionality, making it easier to understand, test, and debug.
+
