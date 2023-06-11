@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TbArrowsExchange } from "react-icons/tb";
 import { GrLinkPrevious } from "react-icons/gr";
+import { ImSpinner9 } from "react-icons/im";
 import "../converter.css";
 import axios from "axios";
 
 const CryptoConverter = () => {
-  
   const [data, setData] = useState(null);
 
   const [convertValue, setConvertValue] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
 
   const [amount, setAmount] = useState(1);
-  const [selectedValueFrom, setSelectedValueFrom] = useState('BTC');
-  const [selectedValueTo, setSelectedValueTo] = useState('ETH');
+  const [selectedValueFrom, setSelectedValueFrom] = useState("BTC");
+  const [selectedValueTo, setSelectedValueTo] = useState("ETH");
 
-//get the lis of crypto and store their symbols in the select dropdown
+  //get the lis of crypto and store their symbols in the select dropdown
   const url =
     "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
 
@@ -33,7 +33,7 @@ const CryptoConverter = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data.data);
-        convertCoin()
+        convertCoin();
       })
       .catch((err) => {
         console.log(err);
@@ -57,11 +57,11 @@ const CryptoConverter = () => {
   const convertUrl =
     "https://pro-api.coinmarketcap.com/v2/tools/price-conversion";
 
-    //logic to handle conversion
+  //logic to handle conversion
   const convertCoin = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     // console.log(selectedValueFrom, selectedValueTo, amount)
-    setIsConverting(true)
+    setIsConverting(true);
 
     axios
       .get(`http://localhost:8080/${convertUrl}`, {
@@ -69,16 +69,17 @@ const CryptoConverter = () => {
           "X-CMC_PRO_API_KEY": process.env.REACT_APP_API_KEY,
         },
         params: {
-          "amount": amount,
-          "symbol": selectedValueFrom,
-          "convert": selectedValueTo,
+          amount: amount,
+          symbol: selectedValueFrom,
+          convert: selectedValueTo,
         },
       })
       .then((res) => {
         console.log(res.data);
-        setIsConverting(false)
-        const convertedPrice = res.data.data[0].quote[selectedValueTo].price.toFixed(3);
-        console.log(convertedPrice)
+        setIsConverting(false);
+        const convertedPrice =
+          res.data.data[0]?.quote[selectedValueTo].price.toFixed(5);
+        console.log(convertedPrice);
         setConvertValue(convertedPrice);
       })
       .catch((err) => {
@@ -100,25 +101,36 @@ const CryptoConverter = () => {
 
   return (
     <div className="converter-wrapper">
-      <h2>Cryptocurrency <span className="app-word">Converter</span></h2>
+      <h2>
+        Cryptocurrency <span className="app-word">Converter</span>
+      </h2>
       <form onSubmit={convertCoin} className="converter">
         <div>
-          <label>Enter amount</label>
-          <input type="number" onChange={handleAmountChange} value={amount} />
+          <label htmlFor="amountInput">Enter amount</label>
+          <input
+            id="amountInput"
+            type="number"
+            onChange={handleAmountChange}
+            value={amount}
+          />
         </div>
         <div className="drop-list">
           <div className="select-box">
-            <p className="from">From</p>
+            <label htmlFor="fromInput" className="from">From</label>
 
-            <select value={selectedValueFrom} onChange={handleSelectFromChange}>{rederedItems}</select>
+            <select id="fromInput" value={selectedValueFrom} onChange={handleSelectFromChange}>
+              {rederedItems}
+            </select>
           </div>
           <div className="convert-icon">
-          <TbArrowsExchange size={32}/>
+            <TbArrowsExchange size={32} />
           </div>
           <div className="select-box">
-            <p className="to">To</p>
+            <label htmlFor="toInput" className="to">To</label>
 
-            <select value={selectedValueTo} onChange={handleSelectToChange}>{rederedItems}</select>
+            <select id="toInput" value={selectedValueTo} onChange={handleSelectToChange}>
+              {rederedItems}
+            </select>
           </div>
         </div>
 
@@ -128,7 +140,7 @@ const CryptoConverter = () => {
           </p>{" "}
           <span className="equal-sign">=</span>{" "}
           {isConverting ? (
-            <ImSpinner9 className="rotation-icon" />
+            <ImSpinner9 className="rotation-icon" data-testid="spinner" />
           ) : (
             <strong>
               {convertValue} {selectedValueTo}
