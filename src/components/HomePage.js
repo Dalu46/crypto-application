@@ -25,7 +25,7 @@ const HomePage = () => {
       });
   }, []);
 
-  // function to get url
+  // function to get all the logos url
   const getUrl = (ids) => {
     const idParams = {
       id: ids,
@@ -53,12 +53,14 @@ const HomePage = () => {
     data &&
     data.map((item) => {
       // console.log(item.quote.USD.percent_change_7d);
-      const price = item.quote.USD.price.toFixed(2);
+      let price = item.quote.USD.price.toFixed(2);
       const lastTwentyFourHours = item.quote.USD.percent_change_24h.toFixed(3);
       const lastSevenDays = item.quote.USD.percent_change_7d.toFixed(3);
 
       const priceDroppedTwentyFourHours = lastTwentyFourHours < 0;
       const priceDroppedSevenDays = lastSevenDays < 0;
+
+      price = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
       return (
         <>
