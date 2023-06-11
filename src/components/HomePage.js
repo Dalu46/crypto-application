@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { GetData } from "../utils/request";
 import "../home.css";
-import axios from "axios";
 
 const HomePage = () => {
   // data state variable to hold the list of crypto, their price and rise/fall
   const [data, setData] = useState(null);
   const [logos, setLogos] = useState({});
 
-  const url =
-    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+  const cryptoParams = {
+    limit: 50,
+  };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/${url}`, {
-        headers: {
-          "X-CMC_PRO_API_KEY": process.env.REACT_APP_API_KEY,
-        },
-        params: {
-          limit: 50,
-        },
-      })
+    GetData("v1/cryptocurrency/listings/latest", cryptoParams)
       .then((response) => {
         setData(response.data.data);
         const allLogoId = response.data.data.map(({ id }) => id).join(",");
@@ -32,20 +25,12 @@ const HomePage = () => {
       });
   }, []);
 
-  // endpoint to get icons
-  const iconsUrl = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info";
-
   // function to get url
   const getUrl = (ids) => {
-    axios
-      .get(`http://localhost:8080/${iconsUrl}`, {
-        headers: {
-          "X-CMC_PRO_API_KEY": process.env.REACT_APP_API_KEY,
-        },
-        params: {
-          id: ids,
-        },
-      })
+    const idParams = {
+      id: ids,
+    };
+    GetData("v2/cryptocurrency/info", idParams)
       .then((response) => {
         console.log(response.data.data);
         const logoData = response.data.data;
@@ -54,7 +39,6 @@ const HomePage = () => {
         const logoUrls = {};
         for (let item in logoData) {
           logoUrls[item] = logoData[item].logo;
-          // console.log(item.logo)
         }
         console.log(logoUrls);
         setLogos(logoUrls);
@@ -63,12 +47,6 @@ const HomePage = () => {
         console.log(error);
       });
   };
-
-  // console.log(data);
-  //get the list of crypto id from the data state
-  // const allLogoId = data && data.map(({ id }) => id).join(",");
-
-  // getUrl(allLogoId);
 
   //render a list of all the cryptos
   const renderedData =

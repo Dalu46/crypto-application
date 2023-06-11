@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { TbArrowsExchange } from "react-icons/tb";
 import { GrLinkPrevious } from "react-icons/gr";
 import { ImSpinner9 } from "react-icons/im";
+import { GetData } from "../utils/request";
 import "../converter.css";
-import axios from "axios";
 
 const CryptoConverter = () => {
   const [data, setData] = useState(null);
@@ -16,31 +16,21 @@ const CryptoConverter = () => {
   const [selectedValueFrom, setSelectedValueFrom] = useState("BTC");
   const [selectedValueTo, setSelectedValueTo] = useState("ETH");
 
-  //get the lis of crypto and store their symbols in the select dropdown
-  const url =
-    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+ 
+  const dataParams = {
+    limit: "20",
+  };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/${url}`, {
-        headers: {
-          "X-CMC_PRO_API_KEY": process.env.REACT_APP_API_KEY,
-        },
-        params: {
-          limit: "20",
-        },
-      })
+    GetData("v1/cryptocurrency/listings/latest", dataParams)
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
         convertCoin();
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [url]);
-
-  // console.log(data);
+  }, []);
 
   const rederedItems =
     data &&
@@ -54,32 +44,21 @@ const CryptoConverter = () => {
       );
     });
 
-  const convertUrl =
-    "https://pro-api.coinmarketcap.com/v2/tools/price-conversion";
-
   //logic to handle conversion
   const convertCoin = (e) => {
     e?.preventDefault();
-    // console.log(selectedValueFrom, selectedValueTo, amount)
+    const convertParams = {
+      amount: amount,
+      symbol: selectedValueFrom,
+      convert: selectedValueTo,
+    };
     setIsConverting(true);
 
-    axios
-      .get(`http://localhost:8080/${convertUrl}`, {
-        headers: {
-          "X-CMC_PRO_API_KEY": process.env.REACT_APP_API_KEY,
-        },
-        params: {
-          amount: amount,
-          symbol: selectedValueFrom,
-          convert: selectedValueTo,
-        },
-      })
+    GetData("v2/tools/price-conversion", convertParams)
       .then((res) => {
-        console.log(res.data);
         setIsConverting(false);
         const convertedPrice =
           res.data.data[0]?.quote[selectedValueTo].price.toFixed(5);
-        console.log(convertedPrice);
         setConvertValue(convertedPrice);
       })
       .catch((err) => {
@@ -116,9 +95,15 @@ const CryptoConverter = () => {
         </div>
         <div className="drop-list">
           <div className="select-box">
-            <label htmlFor="fromInput" className="from">From</label>
+            <label htmlFor="fromInput" className="from">
+              From
+            </label>
 
-            <select id="fromInput" value={selectedValueFrom} onChange={handleSelectFromChange}>
+            <select
+              id="fromInput"
+              value={selectedValueFrom}
+              onChange={handleSelectFromChange}
+            >
               {rederedItems}
             </select>
           </div>
@@ -126,9 +111,15 @@ const CryptoConverter = () => {
             <TbArrowsExchange size={32} />
           </div>
           <div className="select-box">
-            <label htmlFor="toInput" className="to">To</label>
+            <label htmlFor="toInput" className="to">
+              To
+            </label>
 
-            <select id="toInput" value={selectedValueTo} onChange={handleSelectToChange}>
+            <select
+              id="toInput"
+              value={selectedValueTo}
+              onChange={handleSelectToChange}
+            >
               {rederedItems}
             </select>
           </div>
