@@ -5,7 +5,6 @@ import "../home.css";
 import axios from "axios";
 
 const HomePage = () => {
-
   // data state variable to hold the list of crypto, their price and rise/fall
   const [data, setData] = useState(null);
   const [logos, setLogos] = useState({});
@@ -25,6 +24,8 @@ const HomePage = () => {
       })
       .then((response) => {
         setData(response.data.data);
+        const allLogoId = response.data.data.map(({ id }) => id).join(",");
+        getUrl(allLogoId);
       })
       .catch((error) => {
         console.log(error);
@@ -65,9 +66,9 @@ const HomePage = () => {
 
   // console.log(data);
   //get the list of crypto id from the data state
-  const allLogoId = data && data.map(({ id }) => id).join(",");
-  
-  getUrl(allLogoId);
+  // const allLogoId = data && data.map(({ id }) => id).join(",");
+
+  // getUrl(allLogoId);
 
   //render a list of all the cryptos
   const renderedData =
@@ -91,13 +92,15 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div><p>${price}</p></div>
+            <div>
+              <p>${price}</p>
+            </div>
             {/* logic to check if price rise/fall */}
             <div className="rise-fall-wrapper">
               {priceDroppedTwentyFourHours ? (
-                <AiFillCaretDown className="price-fall"/>
+                <AiFillCaretDown className="price-fall" />
               ) : (
-                <AiFillCaretUp className="price-rise"/>
+                <AiFillCaretUp className="price-rise" />
               )}
               <p
                 className={
@@ -109,16 +112,22 @@ const HomePage = () => {
               </p>
             </div>
             <div className="rise-fall-wrapper">
-              {priceDroppedSevenDays ? <AiFillCaretDown className="price-fall"/> : <AiFillCaretUp className="price-rise"/>}
-              
-              <p className={priceDroppedSevenDays ? "price-fall" : "price-rise"}>
+              {priceDroppedSevenDays ? (
+                <AiFillCaretDown className="price-fall" />
+              ) : (
+                <AiFillCaretUp className="price-rise" />
+              )}
+
+              <p
+                className={priceDroppedSevenDays ? "price-fall" : "price-rise"}
+              >
                 {lastSevenDays}
                 <span>%</span>
               </p>
             </div>
           </section>
-          
-            <hr />
+
+          <hr />
         </>
       );
     });
@@ -127,12 +136,14 @@ const HomePage = () => {
     <div className="home-page">
       <div>
         <div className="home-left">
-        <div className="app-header">
-          <h2>
-            Crypto <span className="app-word">App</span>
-          </h2>
+          <div className="app-header">
+            <h2>
+              Crypto <span className="app-word">App</span>
+            </h2>
 
-          <Link to="/converter"><button>Convert Coin</button></Link>
+            <Link to="/converter">
+              <button>Convert Coin</button>
+            </Link>
           </div>
 
           <p>
@@ -144,17 +155,15 @@ const HomePage = () => {
         <div className="home-right">
           <section>
             <div className="crypto-header">
-              
-                <h4>Name</h4>
-                <h4>Price</h4>
-                <h4>24h %</h4>
-                <h4>7 days %</h4>
+              <h4>Name</h4>
+              <h4>Price</h4>
+              <h4>24h %</h4>
+              <h4>7 days %</h4>
             </div>
             <>{renderedData}</>
           </section>
         </div>
       </div>
-    
     </div>
   );
 };
