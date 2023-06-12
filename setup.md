@@ -1,4 +1,12 @@
 # Crypto Application Deployment and Testing Guide
+## IMPORTANT NOTICE!!!
+To run this application locally after clonning from GitHub, instull dependencies by running the following code in the terminal:
+```npm install```
+
+One of the dependencies used in this application is [CORS Anywhere](https://github.com/Rob--W/cors-anywhere), a a NodeJS proxy that adds CORS headers to the proxied request. This dependency helps avoid CORS error. 
+
+Once dependencies are installed, spin up the Cors Anywhere server by running the following code in your terminal:
+```node proxy```
 
 Follow the steps below to deploy and test the crypto application.
 
@@ -37,3 +45,6 @@ To run the unit test for the crypto application, follow these steps:
 4. The test runner will execute the test and provide the test results, including any failures or errors encountered.
 
 Remember to customize the deployment process based on your chosen hosting platform and specific requirements. The above steps provide a general guideline for deploying and testing a React application, but the exact process may vary depending on your deployment method and platform.
+
+
+
